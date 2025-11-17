@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calendrier Scolaire 2025-2026 - Collège Saint Joseph de Cupertino Junior</title>
+    <!-- Importation de Open Sans depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/calendrier.css' %}">
+<style>
+    /* === NAVBAR PERSONNALISÉE + BURGER MENU === */
+    .navbar {
+        background: #4a6cf7;
+        color: white;
+        padding: 1rem 0;
+        transition: transform 0.3s ease-in-out;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .navbar.hidden {
+        transform: translateY(-100%);
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: white;
+        text-decoration: none;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .tab {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    .tab:hover, .tab.active {
+        background: rgba(255,255,255,0.2);
+    }
+
+    /* === BURGER MENU (mobile) === */
+    .burger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+    }
+    .burger span {
+        width: 25px;
+        height: 3px;
+        background: white;
+        border-radius: 3px;
+        transition: 0.3s;
+    }
+    .burger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .burger.active span:nth-child(2) { opacity: 0; }
+    .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+    /* === MOBILE === */
+    @media (max-width: 768px) {
+        .burger { display: flex; }
+        .tabs {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #4a6cf7;
+            flex-direction: column;
+            gap: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .tabs.open {
+            max-height: 500px;
+            padding: 1rem 0;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .tab:last-child { border-bottom: none; }
+    }
+</style>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="logo">
+            <i class="fas fa-school me-2"></i> Collège Saint Joseph de Cupertino Junior
+        </a>
+
+        <!-- Burger (mobile) -->
+        <div class="burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- Menu -->
+        <div class="tabs" id="navbarNav">
+            <a href="{% url 'home' %}" class="tab">Accueil</a>
+            <a href="{% url 'eleves:index_eleves' %}" class="tab">Élèves</a>
+            <a href="{% url 'avis:index_avis' %}" class="tab">Avis</a>
+            <a href="{% url 'calendrier:index_calendrier' %}" class="tab active">Calendrier</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Petit espace pour la navbar fixe -->
+<div style="height: 80px;"></div>
+
+<!-- JS pour le burger -->
+<script>
+    const burger = document.getElementById('burger');
+    const navbarNav = document.getElementById('navbarNav');
+
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('active');
+        navbarNav.classList.toggle('open');
+    });
+
+    // Fermer le menu si on clique dehors
+    document.addEventListener('click', (e) => {
+        if (!burger.contains(e.target) && !navbarNav.contains(e.target)) {
+            burger.classList.remove('active');
+            navbarNav.classList.remove('open');
+        }
+    });
+</script>
+
+    <!-- Contenu du calendrier -->
+    <div class="calendar-section">
+        <h1>Calendrier Scolaire 2025-2026</h1>
+        
+        <h2>Pré-rentrée scolaire</h2>
+        <p>Du lundi 08 au vendredi 12 septembre 2025</p>
+
+        <h2>Premier Semestre : 12 semaines</h2>
+        <p>Du lundi 15 septembre 2025 au vendredi 19 décembre 2025</p>
+        <ul>
+            <li><strong>Septembre :</strong> 2 semaines de cours
+                <ul>
+                    <li>Du 15 au 19 septembre 2025 : Mise à niveau ; Semaine scientifique</li>
+                    <li>Du 22 septembre au 03 octobre 2025 : Semaine de cours</li>
+                </ul>
+            </li>
+            <li><strong>Octobre :</strong>
+                <ul>
+                    <li>Du 03 au 24 octobre 2025 : Semaines de cours</li>
+                    <li>Du 27 au 31 octobre 2025 : 1er devoir du 1er Semestre (Terminale & Niveau I)</li>
+                </ul>
+            </li>
+            <li><strong>Novembre :</strong> 3 semaines de cours
+                <ul>
+                    <li>Du 03 au 07 novembre 2025 : 1er devoir du 1er Semestre (2nde & 1ère)</li>
+                    <li>Du 10 au 14 novembre 2025 : Correction et remise des copies du devoir</li>
+                    <li>Du 17 au 28 novembre 2025 : Semaine de cours</li>
+                </ul>
+            </li>
+            <li><strong>Décembre :</strong> 2 semaines de cours
+                <ul>
+                    <li>Du 01 au 05 décembre 2025 : 2ème devoir du 1er Semestre (Terminale & Niveau I)</li>
+                    <li>Du 08 au 12 décembre 2025 : 2ème devoir du 1er Semestre (2nde & 1ère)</li>
+                    <li>Du 15 au 19 décembre 2025 : Activités récréatives ; fête de fin d’année</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Deuxième Semestre : 18 semaines</h2>
+        <p>Du lundi 05 janvier 2026 au vendredi 31 mai 2026</p>
+        <ul>
+            <li><strong>Janvier :</strong>
+                <ul>
+                    <li>Du 05 au 09 janvier 2026 : Correction, remise des copies puis calculs des moyennes du premier semestre</li>
+                    <li>Du 12 au 23 janvier 2026 : 2 semaines de cours</li>
+                    <li>Du 26 au 30 janvier 2026 : 1 semaine d’examen Blanc</li>
+                </ul>
+            </li>
+            <li><strong>Février :</strong>
+                <ul>
+                    <li>Du 02 au 06 février 2026 : 1er devoir du 2nd Semestre (2nde & Niveau I)</li>
+                    <li>Du 09 au 20 février 2026 : Semaine de cours</li>
+                    <li>Du 20 février au 01 mars 2026 : 1 semaine de congé</li>
+                </ul>
+            </li>
+            <li><strong>Mars :</strong>
+                <ul>
+                    <li>Du 02 au 13 mars 2026 : 2 semaines de cours</li>
+                    <li>Du 16 au 20 mars 2026 : BAC blanc</li>
+                    <li>Du 23 au 27 mars 2026 : CAP blanc</li>
+                    <li>30 mars 2026 : Fête des enseignants</li>
+                    <li>31 mars 2026 : Sortie pédagogique (lieu à venir)</li>
+                </ul>
+            </li>
+            <li><strong>Avril :</strong>
+                <ul>
+                    <li>Du 01 au 15 avril 2026 : 2 semaines de congé</li>
+                    <li>Du 16 au 30 avril 2026 : 2 semaines de cours</li>
+                </ul>
+            </li>
+            <li><strong>Mai :</strong>
+                <ul>
+                    <li>Du 11 au 15 mai 2026 : 1 semaine de devoir</li>
+                    <li>Du 18 au 22 mai 2026 : 1 semaine de correction, remédiation, remise des copies et calcul des moyennes</li>
+                </ul>
+            </li>
+        </ul>
+
+        <p class="signature"><strong>Le DIRECTEUR</strong><br>Julien Botèhoussè AZONNEGBO</p>
+    </div>
+
+    <script>
+        // Script pour faire réapparaître/répliquer la navbar au défilement
+        let lastScroll = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', () => {
+            let currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                navbar.classList.add('hidden');
+            } else {
+                navbar.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>

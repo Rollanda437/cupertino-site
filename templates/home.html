@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Collège Saint Joseph de Cupertino Junior{% endblock %}</title>
+
+    <!-- POLICES GOOGLE -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- CSS EXTERNE -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="{% static 'photos/SJCJ.png' %}" alt="Logo SJCJ">
+            </a>
+            <div class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="tabs" id="navbarNav">
+                <a href="{% url 'home' %}" class="tab">Accueil</a>
+                <a href="{% url 'eleves:index_eleves' %}" class="tab">Élèves</a>
+                <a href="{% url 'avis:index_avis' %}" class="tab">Avis & Communications</a>
+                <a href="{% url 'calendrier:index_calendrier' %}" class="tab">Calendrier</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu -->
+    <div class="content">
+        <div class="hero-section">
+            <h1>
+                Bienvenue sur le portail du Collège<br>
+                Privé d'Enseignement Technique Saint <br>Joseph de Cupertino Junior
+            </h1>
+        </div>
+
+        <h2>Votre avenir commence ici !</h2>
+        <p>
+            Découvrez un environnement d'apprentissage stimulant et innovant,
+            où chaque élève est encouragé à exceller et à réaliser son plein potentiel.
+            Rejoignez-nous pour une expérience éducative unique qui prépare les leaders de demain.
+        </p>
+        <p>
+            Notre établissement offre une variété de programmes académiques et
+            d'activités extrascolaires conçus pour enrichir l'expérience éducative de nos élèves.
+            Que vous soyez intéressé par les sciences, les arts, le sport ou la technologie,
+            nous avons quelque chose à offrir à chacun. Explorez notre site pour en savoir plus sur nos
+            cours, nos enseignants dévoués et les nombreuses opportunités qui vous attendent au
+            Collège Privé d'Enseignement Technique Saint Joseph de Cupertino Junior.
+            Nous sommes impatients de vous accueillir dans notre communauté scolaire dynamique
+            et de vous accompagner dans votre parcours éducatif.
+        </p>
+
+        <h2>L'objectif de cette plateforme :</h2>
+        <p>
+            L'objectif de cette plateforme est de fournir aux élèves, aux parents et au personnel enseignant
+            un accès facile et centralisé à toutes les informations et ressources nécessaires pour une
+            expérience éducative réussie. Que vous cherchiez des mises à jour sur les événements scolaires,
+            des ressources pédagogiques, ou des moyens de communication avec les enseignants,
+            notre plateforme est conçue pour répondre à vos besoins. Nous visons à créer un environnement
+            en ligne convivial et interactif qui favorise la collaboration, l'engagement et le succès
+            académique pour tous les membres de notre communauté scolaire.
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 - Collège Privé d'Enseignement Technique Saint Joseph de Cupertino Junior | Tous droits réservés
+    </footer>
+
+    <!-- JS pour le burger -->
+    <script>
+        const burger = document.getElementById('burger');
+        const navbarNav = document.getElementById('navbarNav');
+
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            navbarNav.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!burger.contains(e.target) && !navbarNav.contains(e.target)) {
+                burger.classList.remove('active');
+                navbarNav.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

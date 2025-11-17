@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listes des Avis - Collège Saint Joseph</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    /* Style temporaire pour le repliement de la navbar */
+    .navbar {
+        transition: transform 0.3s ease-in-out;
+    }
+    .navbar.hidden {
+        transform: translateY(-100%);
+    }
+</style>
+
+<!-- Navbar RESPONSIVE -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            <i class="fas fa-school me-2"></i> Collège  Saint  Joseph  de  Cupertino Junior
+        </a>
+
+        <!-- Bouton Burger (mobile) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'eleves:index_eleves' %}">Élèves</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'avis:index_avis' %}">Avis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'calendrier:index_calendrier' %}">Calendrier</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="container">
+        <h1 class="mt-4">Liste des Avis</h1>
+        <div class="row">
+            {% for avis in avis_liste %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ avis.titre }}</h5>
+                        <p class="text-muted small">Publié le {{ avis.date_publication|date:"d/m/Y à H:i" }}</p>
+                        <p class="card-text">{{ avis.contenu|linebreaks }}</p>
+                        <a href="{% url 'avis:detail_avis' avis.id %}" class="btn btn-sm btn-outline-primary">
+                            Voir les commentaires ({{ avis.commentaires.count }})
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-muted">Aucun avis publié pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>

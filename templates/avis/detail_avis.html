@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail de l'Avis - Collège Saint Joseph</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .detail-section {
+            padding: 40px 0;
+        }
+        .comment-section {
+            margin-top: 20px;
+        }
+        .comment {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'avis:index_avis' %}">Avis</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'avis:liste_avis' %}">Voir les Avis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendrier:index_calendrier' %}">Calendrier</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="detail-section">
+        <div class="container">
+            <h1>{{ avis_detail.titre }}</h1>
+            <p>{{ avis_detail.contenu }}</p>
+            <p class="text-muted">Publié le : {{ avis_detail.date_publication|date:"d/m/Y" }}</p>
+            <h3>Commentaires ({{ commentaires|length }})</h3>
+                <div class="comment-section">
+                    {% for comment in commentaires %}
+                        <div class="comment p-3 mb-3 border rounded">
+                            <p class="mb-1"><strong>{{ comment.nom_parent|default:"Anonyme" }}</strong></p>
+                            <p class="mb-2">{{ comment.commentaire }}</p>
+                            <small class="text-muted">{{ comment.date_publication|date:"d/m/Y à H:i" }}</small>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Aucun commentaire pour le moment. Soyez le premier !</p>
+                    {% endfor %}
+                </div>
+            <a href="{% url 'avis:ajouter_commentaire' avis_id=avis_detail.id %}" class="btn btn-success mt-3">Laissez un commentaire</a>
+            <a href="{% url 'avis:liste_avis' %}" class="btn btn-secondary mt-3">Retour à la liste</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
