@@ -1,310 +1,125 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Calendrier Scolaire 2025-2026 - Collège Saint Joseph de Cupertino Junior</title>
-    <!-- Importation de Open Sans depuis Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-<style>
-body {
-    margin: 0;
-    font-family: 'Open Sans', Arial, sans-serif;
-    background-color: #f5f8fa;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier Scolaire 2025-2026 - SJCJ</title>
+    
+    <!-- POLICES GOOGLE -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #4a6cf7; /* Bleu élégant */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 1000;
-    height: 50px;
-    padding: 0;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-    display: flex;
-    justify-content: flex-end; /* Alignement à droite sans logo */
-    align-items: center;
-    height: 100%;
-}
-
-.tabs {
-    display: flex;
-    align-items: center;
-}
-
-.tab {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    font-size: 0.9em;
-}
-
-.tab.active {
-    background-color: #4a6cf7;;
-}
-
-.tab:hover {
-    background-color: #4a6cf7;;
-}
-
-.calendar-section {
-    margin-top: 60px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 15px;
-}
-
-.calendar-section h1 {
-    color: #4a6cf7;;
-    font-size: 2.5em;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.calendar-section h2 {
-    color: #4a6cf7;;
-    font-size: 1.8em;
-    font-weight: 700;
-    margin-top: 30px;
-    margin-bottom: 10px;
-}
-
-.calendar-section p {
-    color: #333;
-    font-size: 1.1em;
-    margin: 0 0 15px 0;
-    line-height: 1.6;
-}
-
-.calendar-section ul {
-    list-style-type: disc;
-    margin-left: 20px;
-}
-
-.calendar-section li {
-    margin-bottom: 10px;
-}
-
-.signature {
-    text-align: center;
-    font-weight: 700;
-    margin-top: 40px;
-    font-size: 1.2em;
-}
-
-/* Responsivité */
-@media (max-width: 1024px) {
-    .nav-container {
-        padding: 0 10px;
-    }
-    .tab {
-        padding: 6px 10px;
-        font-size: 0.85em;
-    }
-    .calendar-section h1 {
-        font-size: 2em;
-    }
-}
-
-@media (max-width: 768px) {
-    .calendar-section {
-        margin-top: 50px;
-    }
-    .calendar-section h1 {
-        font-size: 1.5em;
-    }
-    .calendar-section h2 {
-        font-size: 1.5em;
-    }
-    .calendar-section p {
-        font-size: 1em;
-    }
-    .tabs {
-        flex-direction: column;
-        align-items: flex-end;
-    }
-    .tab {
-        margin: 5px 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .calendar-section h1 {
-        font-size: 1.2em;
-    }
-    .calendar-section h2 {
-        font-size: 1.3em;
-    }
-    .calendar-section p {
-        font-size: 0.9em;
-    }
-    .tab {
-        font-size: 0.8em;
-        padding: 4px 8px;
-    }
-}
-    /* === NAVBAR PERSONNALISÉE + BURGER MENU === */
-    .navbar {
-        background: #4a6cf7;
-        color: white;
-        padding: 1rem 0;
-        transition: transform 0.3s ease-in-out;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .navbar.hidden {
-        transform: translateY(-100%);
-    }
-
-    .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        font-weight: bold;
-        font-size: 1.5rem;
-        color: white;
-        text-decoration: none;
-    }
-
-    .tabs {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .tab {
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s;
-    }
-    .tab:hover, .tab.active {
-        background: rgba(255,255,255,0.2);
-    }
-
-    /* === BURGER MENU (mobile) === */
-    .burger {
-        display: none;
-        flex-direction: column;
-        cursor: pointer;
-        gap: 5px;
-    }
-    .burger span {
-        width: 25px;
-        height: 3px;
-        background: white;
-        border-radius: 3px;
-        transition: 0.3s;
-    }
-    .burger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .burger.active span:nth-child(2) { opacity: 0; }
-    .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-
-    /* === MOBILE === */
-    @media (max-width: 768px) {
-        .burger { display: flex; }
-        .tabs {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: #4a6cf7;
-            flex-direction: column;
-            gap: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
-        .tabs.open {
-            max-height: 500px;
-            padding: 1rem 0;
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #1a3d7c;
         }
+
+        h1 { font-size: 2.8rem; text-align: center; margin: 2rem 0 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h2 { font-size: 2rem; color: #1a3d7c; margin: 2.5rem 0 1rem; position: relative; padding-bottom: 0.5rem; }
+        h2::after {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            bottom: 0; width: 80px; height: 5px; background: #ff6b6b; border-radius: 3px;
+        }
+
+        p, li { font-size: 1.1rem; color: #34495e; margin-bottom: 1rem; line-height: 1.7; }
+        ul { margin-left: 2rem; margin-bottom: 1.5rem; }
+        li ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+
+        /* NAVBAR PREMIUM SANS LOGO */
+        .navbar {
+            background: linear-gradient(135deg, #1a3d7c 0%, #2c5aa0 100%);
+            color: white; position: fixed; top: 0; width: 100%; z-index: 1000;
+            box-shadow: 0 4px 15px rgba(26, 61, 124, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 1rem;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+
+        .brand-title {
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.3rem; color: white; text-decoration: none;
+        }
+
+        .tabs { display: flex; gap: 1.5rem; list-style: none; }
         .tab {
-            padding: 1rem 2rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.5px;
+            text-transform: uppercase; font-size: 0.9rem; color: white; text-decoration: none;
+            padding: 0.5rem 1rem; border-radius: 6px; transition: background 0.3s;
         }
-        .tab:last-child { border-bottom: none; }
-    }
-</style>
+        .tab:hover, .tab.active { background: rgba(255,255,255,0.2); }
 
-<!-- Navbar -->
-<nav class="navbar" id="navbar">
-    <div class="nav-container">
-        <!-- Logo -->
-        <a href="{% url 'home' %}" class="logo">
-            <i class="fas fa-school me-2"></i> Collège Saint Joseph de Cupertino Junior
-        </a>
+        .burger { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+        .burger span { width: 25px; height: 3px; background: white; border-radius: 3px; transition: 0.3s; }
+        .burger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .burger.active span:nth-child(2) { opacity: 0; }
+        .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
-        <!-- Burger (mobile) -->
-        <div class="burger" id="burger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <!-- Menu -->
-        <div class="tabs" id="navbarNav">
-            <a href="{% url 'home' %}" class="tab">Accueil</a>
-            <a href="{% url 'eleves:index_eleves' %}" class="tab">Élèves</a>
-            <a href="{% url 'avis:index_avis' %}" class="tab">Avis</a>
-            <a href="{% url 'calendrier:index_calendrier' %}" class="tab active">Calendrier</a>
-        </div>
-    </div>
-</nav>
-
-<!-- Petit espace pour la navbar fixe -->
-<div style="height: 80px;"></div>
-
-<!-- JS pour le burger -->
-<script>
-    const burger = document.getElementById('burger');
-    const navbarNav = document.getElementById('navbarNav');
-
-    burger.addEventListener('click', () => {
-        burger.classList.toggle('active');
-        navbarNav.classList.toggle('open');
-    });
-
-    // Fermer le menu si on clique dehors
-    document.addEventListener('click', (e) => {
-        if (!burger.contains(e.target) && !navbarNav.contains(e.target)) {
-            burger.classList.remove('active');
-            navbarNav.classList.remove('open');
+        .content {
+            max-width: 1000px; margin: 100px auto 80px; padding: 0 1.5rem;
         }
-    });
-</script>
 
-    <!-- Contenu du calendrier -->
-    <div class="calendar-section">
+        .signature {
+            text-align: center; font-weight: 700; font-size: 1.4rem; margin-top: 4rem; color: #1a3d7c;
+        }
+
+        footer {
+            background: #1a3d7c; color: #ecf0f1; text-align: center; padding: 2.5rem 0;
+            font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.95rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .burger { display: flex; }
+            .tabs {
+                position: absolute; top: 100%; left: 0; width: 100%; background: #1a3d7c;
+                flex-direction: column; gap: 0; max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+            }
+            .tabs.open { max-height: 500px; padding: 1rem 0; }
+            .tab { padding: 1rem 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.7rem; }
+            p, li { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR PREMIUM SANS LOGO -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="brand-title">SJCJ - Portail Parents</a>
+            <div class="burger" id="burger">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="tabs" id="navbarNav">
+                <a href="{% url 'home' %}" class="tab">Accueil</a>
+                <a href="{% url 'eleves:index_eleves' %}" class="tab">Élèves</a>
+                <a href="{% url 'avis:index_avis' %}" class="tab">Avis</a>
+                <a href="{% url 'calendrier:index_calendrier' %}" class="tab active">Calendrier</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENU CALENDRIER -->
+    <div class="content">
         <h1>Calendrier Scolaire 2025-2026</h1>
-        
+
         <h2>Pré-rentrée scolaire</h2>
         <p>Du lundi 08 au vendredi 12 septembre 2025</p>
 
@@ -379,22 +194,30 @@ body {
             </li>
         </ul>
 
-        <p class="signature"><strong>Le DIRECTEUR</strong><br>Julien Botèhoussè AZONNEGBO</p>
+        <div class="signature">
+            <strong>Le DIRECTEUR</strong><br>
+            Julien Botèhoussè AZONNEGBO
+        </div>
     </div>
 
-    <script>
-        // Script pour faire réapparaître/répliquer la navbar au défilement
-        let lastScroll = 0;
-        const navbar = document.querySelector('.navbar');
+    <!-- FOOTER -->
+    <footer>
+        © 2025 - Collège Privé d'Enseignement Technique Saint Joseph de Cupertino Junior | Tous droits réservés
+    </footer>
 
-        window.addEventListener('scroll', () => {
-            let currentScroll = window.pageYOffset;
-            if (currentScroll > lastScroll && currentScroll > 50) {
-                navbar.classList.add('hidden');
-            } else {
-                navbar.classList.remove('hidden');
+    <!-- JS BURGER MENU -->
+    <script>
+        const burger = document.getElementById('burger');
+        const navbarNav = document.getElementById('navbarNav');
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            navbarNav.classList.toggle('open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!burger.contains(e.target) && !navbarNav.contains(e.target)) {
+                burger.classList.remove('active');
+                navbarNav.classList.remove('open');
             }
-            lastScroll = currentScroll;
         });
     </script>
 </body>
