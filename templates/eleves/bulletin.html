@@ -9,11 +9,19 @@
     <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
+    /* FORCE LE FOOTER À TOUJOURS RESTER EN BAS */
+    html, body {
+        height: 100%;
+        margin: 0;
         font-family: 'Roboto', sans-serif;
         line-height: 1.7;
         color: #2c3e50;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
         min-height: 100vh;
     }
 
@@ -21,17 +29,16 @@
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         color: #1a3d7c;
-        letter-spacing: -0.5px;
     }
 
-    /* NAVBAR PREMIUM (SANS LOGO) */
+    /* NAVBAR */
     .navbar {
         background: linear-gradient(135deg, #1a3d7c 0%, #2c5aa0 100%);
         color: white; position: fixed; top: 0; width: 100%; z-index: 1000;
         box-shadow: 0 4px 15px rgba(26, 61, 124, 0.2);
     }
 
-    .nav-container {
+    .nava-container {
         max-width: 1200px; margin: 0 auto; padding: 0 1rem;
         display: flex; justify-content: space-between; align-items: center; height: 70px;
     }
@@ -54,13 +61,13 @@
     .burger.active span:nth-child(2) { opacity: 0; }
     .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
-    /* CONTENU PARFAITEMENT CENTRÉ */
+    /* CONTENU QUI PREND TOUT L'ESPACE */
     .content {
+        flex: 1;
         max-width: 1000px;
-        margin: 120px auto 80px;
+        margin: 120px auto 60px;
         padding: 0 2rem;
         text-align: center;
-        min-height: calc(100vh - 200px);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -95,17 +102,20 @@
         background: #ff5252;
     }
 
+    /* FOOTER TOUJOURS COLLÉ EN BAS */
     footer {
         background: #1a3d7c;
         color: #ecf0f1;
         text-align: center;
         padding: 2rem 0;
-        margin-top: auto;
+        width: 100%;
         font-family: 'Montserrat', sans-serif;
         font-weight: 500;
         font-size: 0.95rem;
+        margin-top: auto;
     }
 
+    /* RESPONSIVE */
     @media (max-width: 992px) {
         .burger { display: flex; }
         .tabs {
