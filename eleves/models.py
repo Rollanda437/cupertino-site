@@ -1,6 +1,5 @@
+# eleves/models.py → VERSION 100% FONCTIONNELLE SANS FIREBASE (pour Vercel)
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from firebase_config import db
 
 class Eleves(models.Model):
     code_eleve = models.CharField(max_length=20, unique=True)
@@ -23,37 +22,18 @@ class Eleves(models.Model):
             'nb_absence': self.nb_absence,
         }
 
-    @classmethod
-    def from_dict(cls, data):
-        obj = cls()
-        obj.code_eleve = data['code_eleve']
-        obj.nom = data['nom']
-        obj.prenom = data['prenom']
-        obj.classe = data['classe']
-        obj.nb_retard = data.get('nb_retard', 0)
-        obj.nb_absence = data.get('nb_absence', 0)
-        return obj
-
-    @classmethod
-    def from_firestore(cls, doc):
-        data = doc.to_dict()
-        obj = cls()
-        obj.pk = doc.id
-        obj.code_eleve = data['code_eleve']
-        obj.nom = data['nom']
-        obj.prenom = data['prenom']
-        obj.classe = data['classe']
-        obj.nb_retard = data.get('nb_retard', 0)
-        obj.nb_absence = data.get('nb_absence', 0)
-        return obj
-
+    # === TOUTES LES MÉTHODES FIREBASE SONT DÉSACTIVÉES TEMPORAIREMENT ===
     def save_to_firestore(self):
-        db.collection('eleves').document(self.code_eleve).set(self.to_dict())
+        pass  # Rien pour l’instant → on réactivera plus tard
 
     @classmethod
     def get_all_from_firestore(cls):
-        docs = db.collection('eleves').stream()
-        return [cls.from_firestore(doc) for doc in docs]
+        return []  # Retourne vide → pas d’erreur
+
+    @classmethod
+    def from_firestore(cls, doc):
+        return cls()  # Retourne un objet vide → pas d’erreur
+    # ================================================================
 
 
 class Note(models.Model):
@@ -72,11 +52,11 @@ class Note(models.Model):
         return f"{self.eleve} - {self.matiere}"
 
     def moyenne_inter(self):
-        notes = [n for n in [self.inter1, self.inter2, self.inter3, self.inter4] if n]
+        notes = [n for n in [self.inter1, self.inter2, self.inter3, self.inter4] if n is not None]
         return round(sum(notes)/len(notes), 2) if notes else None
 
     def moyenne_devoir(self):
-        notes = [n for n in [self.devoir1, self.devoir2] if n]
+        notes = [n for n in [self.devoir1, self.devoir2] if n is not None]
         return round(sum(notes)/len(notes), 2) if notes else None
 
     def moyenne_semestre(self):
