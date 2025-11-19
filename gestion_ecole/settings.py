@@ -56,6 +56,8 @@ WSGI_APPLICATION = 'gestion_ecole.wsgi.application'
 
 #import os
 import dj_database_url
+from decouple import config
+
 # Base de données
 DATABASES = {
     'default': dj_database_url.config(
