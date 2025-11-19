@@ -54,19 +54,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gestion_ecole.wsgi.application'
 
-# === FIREBASE FIRESTORE ===
-try:
-    from firebase_config import db
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-    FIREBASE_DB = db
-except:
-    pass  # Fallback local
+#import os
+import dj_database_url
+# Base de données
+DATABASES = {
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
+}
 
+# Si tu veux garder SQLite en local et passer en PostgreSQL sur Vercel automatiquement
+if os.getenv('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.parse(os.getenv('DATABASE_URL'))
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
