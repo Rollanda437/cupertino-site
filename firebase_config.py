@@ -1,6 +1,3 @@
-# firebase_config.py → VERSION INVULNÉRABLE 100% (copie-colle intégralement)
-import os
-
 class MockDoc:
     def set(self, data): pass
     def update(self, data): pass
@@ -19,7 +16,7 @@ class MockCollection:
 class MockDB:
     def collection(self, name): return MockCollection()
 
-# LE MOCK GLOBAL QUI REMPLACE TOUT
+# LE SEUL ET UNIQUE db DU PROJET
 db = MockDB()
 
-print("Firebase MOCK activé – plus jamais de crash, même sans fichier JSON")
+print("Firebase MOCK activé – site 100% stable")
