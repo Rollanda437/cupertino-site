@@ -8,7 +8,6 @@ class Eleves(models.Model):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
     classe = models.CharField(max_length=20)
-    fillière = models.CharField(max_length=50, blank=True)
     nb_retard = models.IntegerField(default=0)
     nb_absence = models.IntegerField(default=0)
 
@@ -21,7 +20,6 @@ class Eleves(models.Model):
             'nom': self.nom,
             'prenom': self.prenom,
             'classe': self.classe,
-            'Fillière':self.fillière,
             'nb_retard': self.nb_retard,
             'nb_absence': self.nb_absence,
         }
