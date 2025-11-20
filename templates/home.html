@@ -292,5 +292,11 @@ footer {
             }
         });
     </script>
+    <script type="module">
+        // Charge et initialise Firebase
+        import { db } from "./js/firebase-init.js";
+        window.db = db; // on le rend global pour que tes autres JS puissent l'utiliser
+        console.log("Firestore est prêt → window.db");
+   </script>
 </body>
 </html>
