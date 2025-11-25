@@ -115,32 +115,47 @@
     </div>
 </div>
 </body>
- <script>
-// FORCE LES MATIÈRES SI ELLES NE S'AFFICHENT PAS (solution miracle)
-setTimeout(() => {
-  if (document.querySelectorAll("tbody tr").length === 0 || document.body.innerHTML.includes("Aucune note saisie")) {
-    const classe = document.querySelector("h3")?.textContent.match(/(1ere|Tle|2nde) [A-Z0-9]+/)?.[0] || "";
-    const MATIERES = {
-      "1ere F4": ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","SMC","TP","METRE","HYGIENE","PC"],
-      "2nde F4": ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","DESSIN","INFORMATIQUE","TM/TC","TP","MECANIQUE","PREVENTION","LEGIS"],
-      "Tle F4": ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","METRE","PC","BA","TP","LEGIS"],
-      "2nde IMI": ["FRANÇAIS","ANGLAIS","MATH","EB","LA","AS","SEV","SER","ALGO","MATH APPLIQUE","LEGIS"],
-      "Tle IMI": ["FRANÇAIS","ANGLAIS","MATH","EB","RESEAU","RP","MATH APPLIQUÉ","LEGIS","BD","PG","ELEC"]
-      "Tle F3":   ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","ELECTRO","EST","PRATIQUE","MEL","DESSIN","ANGLAIS"],
-      "2nde FC":  ["FRANÇAIS","ANGLAIS","MATH","EPS","PHYSIQUE","HIST-GEO","PHYSIQUE APPLIQUE","AUTOMATISME","DESSIN","ELECTRO DE BASE"],
-      "1ere HR":  ["FRANÇAIS","ANGLAIS","MATH","TC","SAAH","ECONOMAT","TRB","DROIT","MERCATIQUE","COMPTABILITE"],
-      "2nde F3":  ["FRANÇAIS","ANGLAIS","MATH","PCT","TECHNO","SCHÉMA","DESSIN","ELECTRO","PRATIQUE","MEL"]
-    };
-    
-    const liste = MATIERES[classe] || [];
+<script>
+    // AFFICHAGE AUTOMATIQUE DES MATIÈRES MÊME SI DJANGO NE LES ENVOIE PAS (VERSION COMPLÈTE 2025-2026)
+    setTimeout(() => {
     const tbody = document.querySelector("tbody");
-    if (tbody && liste.length > 0) {
-      tbody.innerHTML = liste.map(m => 
-        `<tr><td class="text-start fw-bold">${m}</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="bg-light fw-bold">—</td><td>—</td><td>—</td><td class="bg-light fw-bold">—</td><td><span class="badge bg-secondary">—</span></td><td>—</td></tr>`
-      ).join("");
-      console.log("MATIÈRES AFFICHÉES PAR MAGIE");
-    }
-  }
-}, 1500);
+    if (!tbody || tbody.children.length > 0) return; // déjà rempli → on touche pas
+
+    const titre = document.querySelector("h3")?.textContent || "";
+    const classeMatch = titre.match(/(1ere|Tle|2nde)[\sA-Z0-9]+/);
+    if (!classeMatch) return;
+    const classe = classeMatch[0].trim();
+
+    const TOUTES_LES_MATIERES = {
+        "1ere F4": ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","SMC","TP","METRE","HYGIENE","PC"],
+        "2nde F4": ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","DESSIN","INFORMATIQUE","TM/TC","TP","MECANIQUE","PREVENTION","LEGIS"],
+        "Tle F4":  ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","METRE","PC","BA","TP","LEGIS"],
+        "2nde IMI": ["FRANÇAIS","ANGLAIS","MATH","EB","LA","AS","SEV","SER","ALGO","MATH APPLIQUE","LEGIS"],
+        "Tle IMI":  ["FRANÇAIS","ANGLAIS","MATH","EB","RESEAU","RP","MATH APPLIQUÉ","LEGIS","BD","PG","ELEC"],
+        "Tle F3":   ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","ELECTRO","EST","PRATIQUE","MEL","DESSIN","ANGLAIS"],
+        "2nde FC":  ["FRANÇAIS","ANGLAIS","MATH","EPS","PHYSIQUE","HIST-GEO","PHYSIQUE APPLIQUE","AUTOMATISME","DESSIN","ELECTRO DE BASE"],
+        "1ere HR":  ["FRANÇAIS","ANGLAIS","MATH","TC","SAAH","ECONOMAT","TRB","DROIT","MERCATIQUE","COMPTABILITE"],
+        "2nde F3":  ["FRANÇAIS","ANGLAIS","MATH","PCT","TECHNO","SCHÉMA","DESSIN","ELECTRO","PRATIQUE","MEL"]
+    };
+
+    const matieres = TOUTES_LES_MATIERES[classe] || [];
+    if (matieres.length === 0) return;
+
+    let rows = "";
+    matieres.forEach(m => {
+        rows += `<tr>
+        <td class="text-start fw-bold">${m}</td>
+        <td>—</td><td>—</td><td>—</td><td>—</td>
+        <td class="bg-light fw-bold">—</td>
+        <td>—</td><td>—</td>
+        <td class="bg-light fw-bold">—</td>
+        <td><span class="badge bg-secondary">—</span></td>
+        <td class="text-start">—</td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = rows;
+    console.log("Toutes les matières affichées pour " + classe + " ❤️");
+    }, 1200);
 </script>
 </html>
