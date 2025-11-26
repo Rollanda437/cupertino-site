@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.views.generic import TemplateView
 from . import views  # Assure-toi d'importer les vues
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,5 @@ urlpatterns = [
     path('calendrier/', include(('calendrier.urls', 'calendrier'), namespace='calendrier')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('static/', include('django.contrib.staticfiles.urls')),
+    path('professeur/saisie/', TemplateView.as_view(template_name='professeur/saisie_notes.html'), name='saisie_notes'),
 ]
