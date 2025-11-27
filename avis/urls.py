@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'avis'  # <--- TRÈS IMPORTANT : namespace !
 urlpatterns = [
-    # path('', views.index_avis, name='index_avis'), 
+    path('', views.index_avis, name='index_avis'), 
     path('', views.liste_avis_public, name='liste_avis'),  # PUBLIC SANS LOGIN
     path('admin-only/', views.liste_avis, name='liste_avis_admin'),  # /avis/admin-only/
     path('liste/', views.liste_avis, name='liste_avis'),              # /avis/liste/
