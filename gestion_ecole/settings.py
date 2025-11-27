@@ -77,7 +77,12 @@ import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'sjcj-site.vercel.app',        # ← ton site Vercel
+    '.vercel.app',                  # ← pour tous les sous-domaines Vercel (recommandé)
+]
 
 DEBUG = False
 
