@@ -1,15 +1,18 @@
 {
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.12"
-    }
-  },
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/api/index"
+      "src": "gestion_ecole/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "10mb" }
+    },
+    {
+      "src": "static/**/*",
+      "use": "@vercel/static"
     }
   ],
-  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
-  "installCommand": "pip install -r requirements.txt"
+  "routes": [
+    { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/(.*)", "dest": "gestion_ecole/wsgi.py" }
+  ]
 }
