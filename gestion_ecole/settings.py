@@ -84,3 +84,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ==================== ADMIN URL SECRÈTE ====================
 # Tu gardes ça
 LOGIN_URL = '/users/login/'
+
+# ===================== FIX VERCEL SQLITE READ-ONLY =====================
+# On désactive les sessions en base → on les met en cookie signé (parfaitement sécurisé)
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True      # seulement en HTTPS (Vercel l’est)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 1209600      # 2 semaines
