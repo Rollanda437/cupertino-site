@@ -143,3 +143,10 @@ if 'VERCEL' in os.environ:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     
 ADMIN_ENABLED = True
+if ADMIN_ENABLED:
+    INSTALLED_APPS += ['django.contrib.admin']
+    MIDDLEWARE += ['django.contrib.sessions.middleware.SessionMiddleware',
+                   'django.contrib.auth.middleware.AuthenticationMiddleware',
+                   'django.contrib.messages.middleware.MessageMiddleware',] 
+     
+# Fin Vercel fix
