@@ -20,8 +20,9 @@ from django.urls import include
 from django.views.generic import TemplateView
 from . import views  # Assure-toi d'importer les vues
 urlpatterns = [
-    path('admin-sjcj-2026/', admin.site.urls),   # ← lien secret
+    
     path('', views.home, name='home'),  # page d'accueil
+    path('admin-sjcj-2026/', admin.site.urls),   # ← lien secret
     path('eleves/', include(('eleves.urls', 'eleves'), namespace='eleves')),
     path('avis/', include(('avis.urls', 'avis'), namespace='avis')),
     path('calendrier/', include(('calendrier.urls', 'calendrier'), namespace='calendrier')),
