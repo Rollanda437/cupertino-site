@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-
+import shutil
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-change-me'  # Change ça plus tard
@@ -51,7 +51,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gestion_ecole.wsgi.application'
 
-DDATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '/tmp/db.sqlite3',           # LE SEUL ENDROIT OÙ ON PEUT ÉCRIRE
