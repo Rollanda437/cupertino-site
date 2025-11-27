@@ -1,7 +1,8 @@
+# Corrige le requirements.txt parfait
 Django==5.2.8
 psycopg2-binary==2.9.9
 dj-database-url==2.1.0
 whitenoise==6.7.0
 gunicorn==23.0.0
-urllib3==1.26.26.20
+urllib3==1.26.20
 requests==2.32.3
