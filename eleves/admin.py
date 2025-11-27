@@ -1,6 +1,6 @@
 # eleves/admin.py – VERSION ULTIME : tu remplis tout comme dans Excel
 from django.contrib import admin
-from .models import Eleve, Note
+from .models import Eleves, Note
 
 class NoteInline(admin.TabularInline):
     model = Note
@@ -14,8 +14,8 @@ class NoteInline(admin.TabularInline):
     class Media:
         css = {'all': ('css/admin_bulletin.css',)}
 
-@admin.register(Eleve)
-class EleveAdmin(admin.ModelAdmin):
+@admin.register(Eleves)
+class ElevesAdmin(admin.ModelAdmin):
     list_display = ('nom_complet', 'classe', 'code_eleve')
     search_fields = ('nom', 'prenom', 'code_eleve')
     list_filter = ('classe',)
