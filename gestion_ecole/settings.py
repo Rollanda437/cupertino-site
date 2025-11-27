@@ -51,13 +51,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gestion_ecole.wsgi.application'
 
-DATABASES = {
+DDATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/tmp/db.sqlite3',           # LE SEUL ENDROIT OÙ ON PEUT ÉCRIRE
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
+# On copie la base du projet vers /tmp au démarrage si elle n’existe pas
+if not os.path.exists('/tmp/db.sqlite3'):
+    import shutil
+    shutil.copy('db.sqlite3', '/tmp/db.sqlite3')
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Africa/Porto-Novo'
 USE_I18N = True
