@@ -85,3 +85,8 @@ TIME_ZONE = 'Africa/Porto-Novo'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# AJOUTE ÇA À LA FIN DU FICHIER (juste avant la dernière ligne)
+import os
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+# Nettoie le cache Vercel à chaque déploiement
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
