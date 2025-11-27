@@ -37,8 +37,8 @@ def bulletin(request, code_eleve):
     total_points = 0
     total_coeff = 0
     for n in notes:
-        if n.note is not None:
-            total_points += float(n.note) * n.matiere.coefficient
+        if n.notes is not None:
+            total_points += float(n.notes) * n.matiere.coefficient
             total_coeff += n.matiere.coefficient
 
     moyenne_generale = round(total_points / total_coeff, 2) if total_coeff > 0 else None
