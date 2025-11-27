@@ -115,37 +115,40 @@
     </div>
 </div>
 </body>
-  <script>
-    // VERSION ULTRA FIABLE – affiche les matières même si Django ne fait rien
+<script>
+ // Affiche les matières manquantes même si Django n’a pas encore de notes
     document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(() => {
-            const tbody = document.querySelector("table tbody");
-            if (!tbody || tbody.querySelector("tr td")?.textContent.trim() === "Aucune note saisie") {
-            // vide → on remplit
-            } else {
-            return; // déjà rempli → on touche pas
-            }
+        const tbody = document.querySelector("table tbody");
+        if (!tbody) return;
 
-            // Récupère la classe depuis le titre
-            const titreClasse = document.querySelector("h3")?.textContent || "";
-            const classe = titreClasse.match(/(1ere F4|2nde F4|Tle F4|2nde IMI|Tle IMI|Tle F3|2nde FC|1ere HR|2nde F3)/i)?.[0];
-            if (!classe) return;
+        // Si déjà des notes → on ne touche à rien
+        if (tbody.querySelector("tr td:not(.text-muted)")?.textContent.trim() !== "Aucune note saisie") {
+            return;
+        }
 
-            const MATIERES = {
-            "1ere F4": ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","SMC","TP","METRE","HYGIENE","PC"],
-            "2nde F4": ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","DESSIN","INFORMATIQUE","TM/TC","TP","MECANIQUE","PREVENTION","LEGIS"],
-            "Tle F4":  ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","METRE","PC","BA","TP","LEGIS"],
-            "2nde IMI": ["FRANÇAIS","ANGLAIS","MATH","EB","LA","AS","SEV","SER","ALGO","MATH APPLIQUE","LEGIS"],
-            "Tle IMI":  ["FRANÇAIS","ANGLAIS","MATH","EB","RESEAU","RP","MATH APPLIQUÉ","LEGIS","BD","PG","ELEC"],
-            "Tle F3":   ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","ELECTRO","EST","PRATIQUE","MEL","DESSIN","ANGLAIS"],
-            "2nde FC":  ["FRANÇAIS","ANGLAIS","MATH","EPS","PHYSIQUE","HIST-GEO","PHYSIQUE APPLIQUE","AUTOMATISME","DESSIN","ELECTRO DE BASE"],
-            "1ere HR":  ["FRANÇAIS","ANGLAIS","MATH","TC","SAAH","ECONOMAT","TRB","DROIT","MERCATIQUE","COMPTABILITE"],
-            "2nde F3":  ["FRANÇAIS","ANGLAIS","MATH","PCT","TECHNO","SCHÉMA","DESSIN","ELECTRO","PRATIQUE","MEL"]
-            };
+        // Récupère la classe depuis le titre
+        const titre = document.querySelector("h3")?.textContent || "";
+        const match = titre.match(/(1ere F4|2nde F4|Tle F4|2nde IMI|Tle IMI|Tle F3|2nde FC|1ere HR|2nde F3)/i);
+        if (!match) return;
+        const classe = match[0].toUpperCase().replace("ERE", "ère");
 
-            const liste = MATIERES[classe] || [];
-            tbody.innerHTML = liste.map(m => 
-            `<tr>
+        const MATIERES = {
+            "1ÈRE F4": ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","SMC","TP","METRE","HYGIENE","PC"],
+            "2NDE F4": ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","DESSIN","INFORMATIQUE","TM/TC","TP","MECANIQUE","PREVENTION","LEGIS"],
+            "TLE F4":  ["FRANÇAIS","ANGLAIS","MATH","PCT","RDM","PE","DESSIN","METRE","PC","BA","TP","LEGIS"],
+            "2NDE IMI": ["FRANÇAIS","ANGLAIS","MATH","EB","LA","AS","SEV","SER","ALGO","MATH APPLIQUE","LEGIS"],
+            "TLE IMI":  ["FRANÇAIS","ANGLAIS","MATH","EB","RESEAU","RP","MATH APPLIQUÉ","LEGIS","BD","PG","ELEC"],
+            "TLE F3":   ["FRANÇAIS","ANGLAIS","MATH","PHYSIQUE","ELECTRO","EST","PRATIQUE","MEL","DESSIN","ANGLAIS"],
+            "2NDE FC":  ["FRANÇAIS","ANGLAIS","MATH","EPS","PHYSIQUE","HIST-GÉO","PHYSIQUE APPLIQUE","AUTOMATISME","DESSIN","ELECTRO DE BASE"],
+            "1ÈRE HR":  ["FRANÇAIS","ANGLAIS","MATH","TC","SAAH","ECONOMAT","TRB","DROIT","MERCATIQUE","COMPTABILITE"],
+            "2NDE F3":  ["FRANÇAIS","ANGLAIS","MATH","PCT","TECHNO","SCHÉMA","DESSIN","ELECTRO","PRATIQUE","MEL"]
+        };
+
+        const liste = MATIERES[classe] || [];
+        if (liste.length === 0) return;
+
+        tbody.innerHTML = liste.map(m => `
+            <tr>
                 <td class="text-start fw-bold">${m}</td>
                 <td>—</td><td>—</td><td>—</td><td>—</td>
                 <td class="bg-light fw-bold">—</td>
@@ -153,11 +156,8 @@
                 <td class="bg-light fw-bold">—</td>
                 <td><span class="badge bg-secondary">—</span></td>
                 <td class="text-start">—</td>
-            </tr>`
-            ).join("");
-
-            console.log("Matières affichées pour " + classe + " ❤️");
-        }, 1000);
+            </tr>
+        `).join("");
     });
 </script>
 </html>
