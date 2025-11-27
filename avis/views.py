@@ -7,7 +7,9 @@ from .forms import AvisForm, CommentaireForm
 # 🏠 Page d’accueil des avis
 def index_avis(request):
     return render(request, "avis/index.html")
-
+def liste_avis_public(request):
+    avis = Avis.objects.filter(publie=True).order_by('-date_publication')
+    return render(request, 'avis/liste.html', {'avis': avis})
 
 # 📰 Liste + ajout d’un avis
 @login_required
