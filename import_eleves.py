@@ -13,4 +13,4 @@ with open('eleves_import.csv', 'r', encoding='utf-8') as f:
                 'classe': classe
             }
         )
-print("96 élèves importés !")
+print("112 élèves importés !")
