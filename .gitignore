@@ -1,2 +1,5 @@
 firebase_service_account.json
 *.json
+# Fichiers Python compilés
+*.pyc
+__pycache__/
