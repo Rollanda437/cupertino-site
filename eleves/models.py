@@ -36,7 +36,13 @@ class Matiere(models.Model):
 
     class Meta:
         verbose_name_plural = "Matières"
+# models.py
+class ImportElevesFile(models.Model):
+    fichier = models.FileField(upload_to='imports/')
+    date_upload = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Import du {self.date_upload.strftime('%d/%m/%Y %H:%M')}"
 
 class Semestre(models.Model):
     nom = models.CharField(max_length=10, unique=True)  # S1, S2, S3...
