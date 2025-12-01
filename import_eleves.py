@@ -1,16 +1,25 @@
-import csv
+
+import os, django, csv
+os.environ['DJANGO_SETTINGS_MODULE'] = ('gestion_ecole.settings')
 from eleves.models import Eleves, Classe
 
-with open('eleves_import.csv', 'r', encoding='utf-8') as f:
+# Vide tout d'abord
+Eleves.objects.all().delete()
+Classe.objects.all().delete()
+
+# Importe le nouveau CSV
+with open('eleves_import.csv', 'utf-8') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        classe, created = Classe.objects.get_or_create(nom=row['classe'])
+        classe, _ = Classe.objects.get_or_create(nom=row['classe'].strip())
         Eleves.objects.update_or_create(
-            code_eleve=row['code_eleve'],
+            code_eleve=row['code_eleve'].strip(),
             defaults={
-                'prenom': row['prenom'],
-                'nom': row['nom'],
+                'prenom': row['prenom'].strip().title(),
+                'nom': row['nom'].strip().upper(),
                 'classe': classe
             }
         )
-print("96 élèves importés !")
+
+# On compte
+print(f"{Eleves.objects.count()} élèves importés avec succès !")
