@@ -1,55 +1,91 @@
-import csv
-import io
-import requests
-from django.core.exceptions import ObjectDoesNotExist
+# eleves/sheets_repository.py
 
-# METS TON VRAI ID ICI (ex: 1vOaB2y5G9tY8eXz7kL3mQ9wR4tY6uI8oP9aS1dF3gH4)
-SHEET_ID = "1iaegOAee9aA-nNyozgDnROwQPS3EJw9qoYhpeKd0TAM"
+from sheets_api import get_data_from_sheet # Assurez-vous que le chemin est correct
 
-def _get_sheet_csv():
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv"
-    r = requests.get(url)
-    r.raise_for_status()
-    return r.content.decode('utf-8')
+# --- 1. Classes de Simulation (Simule les objets de modèle Django) ---
 
 class EleveSheet:
-    DoesNotExist = ObjectDoesNotExist
-    def __init__(self, row):
-        self.code_eleve = str(row.get("code_eleve", "")).strip().upper()
-        self.prenom = row.get("prenom", "").strip().title()
-        self.nom = row.get("nom", "").strip().upper()
-        self.classe = row.get("classe", "").strip()
+    """Simule l'objet Eleves de Django."""
+    def __init__(self, data):
+        # Assurez-vous que les clés correspondent aux colonnes de Eleves_DB
+        self.code_eleve = data.get('code_eleve', '')
+        self.nom = data.get('nom', '')
+        self.prenom = data.get('prenom', '')
+        self.classe = data.get('classe', '')
 
-def get_eleve_by_code(code):
-    csv_data = _get_sheet_csv()
-    reader = csv.DictReader(io.StringIO(csv_data))
-    code = code.strip().upper()
-    for row in reader:
-        if str(row.get("code_eleve", "")).strip().upper() == code:
-            return EleveSheet(row)
-    raise EleveSheet.DoesNotExist()
+class MatiereSheet:
+    """Simule l'objet Matiere de Django."""
+    def __init__(self, nom):
+        self.nom = nom # La matière est stockée comme une chaîne dans Notes_DB
 
-def get_notes_for_bulletin(eleve, semestre="S1"):
-    csv_data = _get_sheet_csv()
-    reader = csv.DictReader(io.StringIO(csv_data))
-    for row in reader:
-        if str(row.get("code_eleve", "")).strip().upper() == eleve.code_eleve:
-            notes = []
-            for key, value in row.items():
-                if semestre in key and any(x in key.lower() for x in ["inter", "devoir"]):
-                    matiere = key.split(f" {semestre}")[0]
-                    note = type('obj', (), {})()
-                    note.matiere = matiere
-                    note.inter1 = _to_float(row.get(f"{matiere} {semestre} Inter1"))
-                    note.inter2 = _to_float(row.get(f"{matiere} {semestre} Inter2"))
-                    note.inter3 = _to_float(row.get(f"{matiere} {semestre} Inter3"))
-                    note.inter4 = _to_float(row.get(f"{matiere} {semestre} Inter4"))
-                    note.devoir1 = _to_float(row.get(f"{matiere} {semestre} Devoir1"))
-                    note.devoir2 = _to_float(row.get(f"{matiere} {semestre} Devoir2"))
-                    notes.append(note)
-            return notes
-    return []
+class SemestreSheet:
+    """Simule l'objet Semestre de Django."""
+    def __init__(self, nom):
+        self.nom = nom
 
-def _to_float(val):
-    try: return float(val) if val and val.strip() else None
-    except: return None
+class NoteSheet:
+    """Simule l'objet Note de Django."""
+    def __init__(self, data, eleve, semestre):
+        # ⚠️ Clé Étrangère simulée
+        self.eleve = eleve
+        self.semestre = semestre 
+        
+        # Simule la relation select_related('matiere')
+        self.matiere = MatiereSheet(data.get('matiere', '')) 
+        
+        # Conversion des notes en float (important pour les calculs de votre vue)
+        try:
+            self.inter1 = float(data.get('inter1', 0)) if data.get('inter1') else None
+            self.inter2 = float(data.get('inter2', 0)) if data.get('inter2') else None
+            self.inter3 = float(data.get('inter3', 0)) if data.get('inter3') else None
+            self.inter4 = float(data.get('inter4', 0)) if data.get('inter4') else None
+            self.devoir1 = float(data.get('devoir1', 0)) if data.get('devoir1') else None
+            self.devoir2 = float(data.get('devoir2', 0)) if data.get('devoir2') else None
+        except ValueError:
+            # Gérer le cas où Sheets renvoie du texte non numérique
+            self.inter1, self.inter2, self.inter3, self.inter4 = None, None, None, None
+            self.devoir1, self.devoir2 = None, None
+            
+        # Les champs 'moyenne_interrogations', 'moyenne_devoirs', 'moyenne_semestre'
+        # seront ajoutés par la vue 'bulletin' elle-même, comme avant !
+
+
+# --- 2. Fonctions de Remplacement des Requêtes ORM ---
+
+def get_eleve_by_code(code_eleve):
+    """Remplace Eleves.objects.get(code_eleve=code)."""
+    eleves_all = get_data_from_sheet("Eleves_DB")
+    
+    data = next(
+        (e for e in eleves_all if str(e.get('code_eleve', '')).upper() == code_eleve), 
+        None
+    )
+    
+    if data:
+        return EleveSheet(data)
+    raise EleveSheet.DoesNotExist # Simuler l'exception Django
+
+# Ajouter une classe pour simuler l'exception (pour que votre code ne plante pas)
+class DoesNotExist(Exception):
+    pass
+EleveSheet.DoesNotExist = DoesNotExist
+
+
+def get_notes_for_bulletin(eleve_obj, semestre_nom):
+    """Simule Note.objects.filter(eleve=eleve, semestre=semestre).select_related('matiere')."""
+    notes_all = get_data_from_sheet("Notes_DB")
+    
+    # Simuler l'objet Semestre requis par votre vue
+    semestre_obj = SemestreSheet(semestre_nom)
+
+    # Filtrer les notes pour l'élève et le semestre donné
+    notes_filtrees = [
+        n for n in notes_all 
+        if str(n.get('code_eleve', '')).upper() == eleve_obj.code_eleve.upper() 
+        and n.get('semestre') == semestre_nom
+    ]
+    
+    # Convertir chaque dictionnaire de note filtrée en objet NoteSheet
+    note_objects = [NoteSheet(data, eleve_obj, semestre_obj) for data in notes_filtrees]
+
+    return note_objects
