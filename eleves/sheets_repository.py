@@ -1,19 +1,19 @@
-# 1. Crée le fichier repository qui lit TOUT depuis Google Sheets
-
-import pandas as pd
+import csv
+import io
 import requests
 from django.core.exceptions import ObjectDoesNotExist
 
-# METS TON VRAI LIEN ICI (après avoir fait "Partager > Toute personne avec le lien peut voir")
-SHEET_ID = "1iaegOAee9aA-nNyozgDnROwQPS3EJw9qoYhpeKd0TAM"  # ← Remplace par ton Google Sheet
+# METS TON VRAI ID ICI (ex: 1vOaB2y5G9tY8eXz7kL3mQ9wR4tY6uI8oP9aS1dF3gH4)
+SHEET_ID = "1iaegOAee9aA-nNyozgDnROwQPS3EJw9qoYhpeKd0TAM"
 
-def _get_df():
+def _get_sheet_csv():
     url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv"
-    return pd.read_csv(url).fillna("")
+    r = requests.get(url)
+    r.raise_for_status()
+    return r.content.decode('utf-8')
 
 class EleveSheet:
     DoesNotExist = ObjectDoesNotExist
-    
     def __init__(self, row):
         self.code_eleve = str(row.get("code_eleve", "")).strip().upper()
         self.prenom = row.get("prenom", "").strip().title()
@@ -21,34 +21,35 @@ class EleveSheet:
         self.classe = row.get("classe", "").strip()
 
 def get_eleve_by_code(code):
-    df = _get_df()
-    code = str(code).strip().upper()
-    row = df[df['code_eleve'].astype(str).str.upper() == code]
-    if row.empty:
-        raise EleveSheet.DoesNotExist()
-    return EleveSheet(row.iloc[0])
+    csv_data = _get_sheet_csv()
+    reader = csv.DictReader(io.StringIO(csv_data))
+    code = code.strip().upper()
+    for row in reader:
+        if str(row.get("code_eleve", "")).strip().upper() == code:
+            return EleveSheet(row)
+    raise EleveSheet.DoesNotExist()
 
 def get_notes_for_bulletin(eleve, semestre="S1"):
-    df = _get_df()
-    mask = df['code_eleve'].astype(str).str.upper() == eleve.code_eleve
-    row = df[mask]
-    if row.empty:
-        return []
-    
-    notes = []
-    cols = df.columns.tolist()
-    matieres_cols = [c for c in cols if c not in ["code_eleve","prenom","nom","classe"]]
-    
-    for col in matieres_cols:
-        if semestre not in col and any(x in col.lower() for x in ["inter","devoir","note"]):
-            continue
-        note = type('NoteSheet', (), {})()
-        note.matiere = col.split(f" {semestre}")[0] if f" {semestre}" in col else col
-        note.inter1 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Inter1", ""), errors='coerce').iloc[0]
-        note.inter2 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Inter2", ""), errors='coerce').iloc[0]
-        note.inter3 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Inter3", ""), errors='coerce').iloc[0]
-        note.inter4 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Inter4", ""), errors='coerce').iloc[0]
-        note.devoir1 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Devoir1", ""), errors='coerce').iloc[0]
-        note.devoir2 = pd.to_numeric(row.get(f"{note.matiere} {semestre} Devoir2", ""), errors='coerce').iloc[0]
-        notes.append(note)
-    return notes
+    csv_data = _get_sheet_csv()
+    reader = csv.DictReader(io.StringIO(csv_data))
+    for row in reader:
+        if str(row.get("code_eleve", "")).strip().upper() == eleve.code_eleve:
+            notes = []
+            for key, value in row.items():
+                if semestre in key and any(x in key.lower() for x in ["inter", "devoir"]):
+                    matiere = key.split(f" {semestre}")[0]
+                    note = type('obj', (), {})()
+                    note.matiere = matiere
+                    note.inter1 = _to_float(row.get(f"{matiere} {semestre} Inter1"))
+                    note.inter2 = _to_float(row.get(f"{matiere} {semestre} Inter2"))
+                    note.inter3 = _to_float(row.get(f"{matiere} {semestre} Inter3"))
+                    note.inter4 = _to_float(row.get(f"{matiere} {semestre} Inter4"))
+                    note.devoir1 = _to_float(row.get(f"{matiere} {semestre} Devoir1"))
+                    note.devoir2 = _to_float(row.get(f"{matiere} {semestre} Devoir2"))
+                    notes.append(note)
+            return notes
+    return []
+
+def _to_float(val):
+    try: return float(val) if val and val.strip() else None
+    except: return None
