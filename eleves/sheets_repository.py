@@ -1,9 +1,16 @@
 # eleves/sheets_repository.py
 
-from sheets_api import get_data_from_sheet # Assurez-vous que le chemin est correct
+#from sheets_api import get_data_from_sheet # Assurez-vous que le chemin est correct
 
 # --- 1. Classes de Simulation (Simule les objets de modèle Django) ---
-
+def get_data_from_sheet(worksheet_name):
+    print(f"DEBUG: Appel API Sheets simulé pour {worksheet_name}")
+    if worksheet_name == "Eleves_DB":
+        return [{'code_eleve': 'E001', 'nom': 'Dupont', 'prenom': 'Alice', 'classe': '6eA'}]
+    if worksheet_name == "Notes_DB":
+        return [{'code_eleve': 'E001', 'semestre': 'S1', 'matiere': 'Maths', 
+                 'inter1': 10, 'inter2': 12, 'devoir1': 15, 'devoir2': 14}]
+    return []
 class EleveSheet:
     """Simule l'objet Eleves de Django."""
     def __init__(self, data):
