@@ -11,7 +11,25 @@ class Classe(models.Model):
     class Meta:
         verbose_name_plural = "Classes"
 
+class ListeEleves(models.Model):
+    fichier = models.FileField(upload_to='liste/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return f"Liste du {self.uploaded_at.strftime('%d/%m %Y %H:%M')}"
+class ListeEleves(models.Model):
+    fichier = models.FileField(upload_to='liste/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-uploaded_at']
+        verbose_name_plural = "Listes des élèves"
+
+    def __str__(self):
+        return f"Liste uploadée le {self.uploaded_at.strftime('%d/%m/%Y %H:%M')}"
 class Eleves(models.Model):
     code_eleve = models.CharField("Code élève", max_length=20, unique=True, primary_key=True)
     nom = models.CharField("Nom", max_length=50)
@@ -36,13 +54,7 @@ class Matiere(models.Model):
 
     class Meta:
         verbose_name_plural = "Matières"
-# models.py
-class ImportElevesFile(models.Model):
-    fichier = models.FileField(upload_to='imports/')
-    date_upload = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Import du {self.date_upload.strftime('%d/%m/%Y %H:%M')}"
 
 class Semestre(models.Model):
     nom = models.CharField(max_length=10, unique=True)  # S1, S2, S3...
