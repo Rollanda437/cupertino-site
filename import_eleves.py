@@ -49,7 +49,7 @@ def importer_dernier_csv():
                             'classe': classe,
                         }
                     )
-            lignes_importe += 1
+                lignes_importe += 1
         
         # ⚠️ Correction du nom du fichier dans le message de succès (eleves_import.csv)
         print(f"✅ {Eleves.objects.count()} élèves importés depuis {CSV_FILE_NAME}!") 
