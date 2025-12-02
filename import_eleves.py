@@ -1,56 +1,44 @@
-# import_eleves.py
+# import_eleves.py (MODIFICATION)
 
 import os
 import csv
 import django
-from eleves.models import Eleves, Classe, ListeEleves
+from eleves.models import Eleves, Classe
 
-# --- 1. Initialisation de l'Environnement Django ---
-# Indique à Django le chemin de votre fichier settings.py
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gestion_ecole.settings')
-django.setup()
-# ----------------------------------------------------
+# Utilisez os.path.join pour construire le chemin vers le fichier
+# BASE_DIR est nécessaire pour trouver le fichier par rapport à la racine du projet
+from django.conf import settings
+CSV_FILE_PATH = os.path.join(settings.BASE_DIR, 'eleves_import.csv') 
+# Vous pourriez aussi simplement utiliser CSV_FILE_PATH = 'import_eleves.csv' si le script est exécuté depuis la racine
 
 
 def importer_dernier_csv():
-    """
-    Récupère le fichier CSV le plus récent de la table ListeEleves,
-    efface les données existantes (Eleves et Classe) et importe les nouvelles.
-    """
-    try:
-        # Récupère le fichier le plus récent (si votre modèle a un ordering basé sur la date)
-        dernier = ListeEleves.objects.first()  
-    except Exception as e:
-        # Gérer le cas où la base de données est vide ou la table n'existe pas encore
-        print(f"Erreur lors de l'accès à ListeEleves : {e}")
-        return
+    """Importe les élèves directement depuis 'eleves_import.csv'."""
 
-    if not dernier:
-        print("Aucun fichier d'élèves uploadé dans la base de données. Opération annulée.")
-        return
-
-    # --- Nettoyage des anciennes données ---
+    # ⚠️ Retirez la ligne qui cherche le fichier dans la base de données ListeEleves :
+    # dernier = ListeEleves.objects.first() 
+    # if not dernier:
+    #     print("Aucun fichier uploadé")
+    #     return
+    
     Eleves.objects.all().delete()
     Classe.objects.all().delete()
     print("Anciennes données élèves et classes supprimées.")
 
-    # --- Lecture et Importation du CSV ---
-    # Utilisez dernier.fichier.path qui est le chemin d'accès au fichier sur le disque
+    # --- Lecture du fichier CSV fixe ---
     try:
-        with open(dernier.fichier.path, 'r', encoding='utf-8') as f:
+        # Utilisez le chemin du fichier que vous avez committé
+        with open(CSV_FILE_PATH, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
-            lignes_importe = 0
+            # ... (Le reste de la logique d'importation reste inchangé) ...
             
+            # ... (Copiez ici toute la boucle 'for row in reader:') ...
             for row in reader:
-                # 1. Créer ou récupérer la classe
                 classe_nom = row.get('classe', '').strip().upper()
-                if not classe_nom:
-                    # Sauter les lignes sans nom de classe pour éviter une erreur
-                    continue 
+                if not classe_nom: continue 
 
                 classe, created = Classe.objects.get_or_create(nom=classe_nom)
                 
-                # 2. Mettre à jour ou créer l'élève
                 Eleves.objects.update_or_create(
                     code_eleves=row.get('code_eleves', '').strip(),
                     defaults={
@@ -59,18 +47,15 @@ def importer_dernier_csv():
                         'classe': classe,
                     }
                 )
-                lignes_importe += 1
-                
-        print(f"✅ {Eleves.objects.count()} élèves importés (à partir de {lignes_importe} lignes traitées) !")
+        print(f"✅ {Eleves.objects.count()} élèves importés depuis import_eleves.csv!")
         
     except FileNotFoundError:
-        print(f"Erreur : Le fichier CSV est introuvable au chemin : {dernier.fichier.path}")
+        print(f"Erreur : Le fichier CSV est introuvable au chemin : {CSV_FILE_PATH}. Assurez-vous qu'il est bien committé.")
     except KeyError as e:
-        print(f"Erreur : Colonne manquante dans le CSV : {e}. Vérifiez les en-têtes (code_eleves, prenom, nom, classe).")
+        print(f"Erreur : Colonne manquante dans le CSV : {e}.")
     except Exception as e:
-        print(f"Une erreur inattendue est survenue pendant l'importation : {e}")
+        print(f"Une erreur inattendue est survenue : {e}")
 
 
-# --- 2. Exécution du script ---
 if __name__ == "__main__":
     importer_dernier_csv()
