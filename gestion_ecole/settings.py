@@ -55,7 +55,8 @@ WSGI_APPLICATION = 'gestion_ecole.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/tmp/db.sqlite3',
+        # Localement, la base est ici (dans le répertoire du projet)
+        'NAME': BASE_DIR / 'db.sqlite3',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -63,28 +64,34 @@ DATABASES = {
     }
 }
 
-# Copie automatique de la base (si elle existe à la racine) VERS /tmp
+# LOGIQUE DE COPIE DB POUR VERCEL
+# Le chemin temporaire de Vercel doit être /tmp, pas la racine /
 LOCAL_DB_PATH = BASE_DIR / 'db.sqlite3'
-TMP_DB_PATH = Path('/tmp/db.sqlite3')
+TMP_DB_PATH = Path('/tmp/db.sqlite3') # 💡 CORRECTION: utilisation de /tmp
 
-if LOCAL_DB_PATH.exists() and not TMP_DB_PATH.exists():
+# Nous n'exécutons la copie que si nous ne sommes PAS en mode DEBUG (c'est-à-dire en Production)
+# Cette vérification est souvent utilisée dans les environnements sans serveur (Lambda/Vercel)
+if not DEBUG and LOCAL_DB_PATH.exists() and not TMP_DB_PATH.exists():
     try:
+        # Copie la base de données intégrée dans le paquet Vercel vers le répertoire temporaire (/tmp)
         shutil.copy(str(LOCAL_DB_PATH), str(TMP_DB_PATH))
-        os.chmod(str(TMP_DB_PATH), 0o666)  # droits d'écriture
+        # Définir les droits d'écriture sur le fichier copié
+        os.chmod(str(TMP_DB_PATH), 0o666)
     except Exception as e:
-        print("Copie DB échouée, on continue sans :", e)
+        print(f"Copie DB échouée (seulement un problème si c'est la première exécution sur Vercel) : {e}")
+
 
 # Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Africa/Porto-Novo'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # AJOUTE ÇA À LA FIN DU FICHIER (juste avant la dernière ligne)
 import os
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
