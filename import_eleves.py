@@ -8,7 +8,8 @@ from eleves.models import Eleves, Classe
 # Utilisez os.path.join pour construire le chemin vers le fichier
 # BASE_DIR est nécessaire pour trouver le fichier par rapport à la racine du projet
 from django.conf import settings
-CSV_FILE_PATH = os.path.join(settings.BASE_DIR, 'eleves_import.csv') 
+CSV_FILE_NAME = 'eleves_import.csv'
+CSV_FILE_PATH = os.path.join(settings.BASE_DIR, CSV_FILE_NAME)
 # Vous pourriez aussi simplement utiliser CSV_FILE_PATH = 'import_eleves.csv' si le script est exécuté depuis la racine
 
 
