@@ -20,7 +20,7 @@ from django.urls import include
 from django.views.generic import TemplateView
 from . import views  # Assure-toi d'importer les vues
 urlpatterns = [
-    path('admin-sjcj-2026/', admin.site.urls),   # ← lien secret
+    path('admin/', admin.site.urls),   # ← lien secret
     path('refresh-eleves/', views.refresh_eleves, name='refresh_eleves'),
     path('', views.home, name='home'),  # page d'accueil
     path('eleves/', include(('eleves.urls', 'eleves'), namespace='eleves')),
