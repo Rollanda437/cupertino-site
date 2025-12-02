@@ -1,4 +1,0 @@
-# Fichiers de base de données et de cache à ignorer
-db.sqlite3
-__pycache__/
-*.pyc
