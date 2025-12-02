@@ -10,16 +10,6 @@ class Classe(models.Model):
 
     class Meta:
         verbose_name_plural = "Classes"
-
-class ListeEleves(models.Model):
-    fichier = models.FileField(upload_to='liste/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-uploaded_at']
-
-    def __str__(self):
-        return f"Liste du {self.uploaded_at.strftime('%d/%m %Y %H:%M')}"
 class ListeEleves(models.Model):
     fichier = models.FileField(upload_to='liste/')
     uploaded_at = models.DateTimeField(auto_now_add=True)

@@ -21,7 +21,6 @@ from django.views.generic import TemplateView
 from . import views  # Assure-toi d'importer les vues
 urlpatterns = [
     path('admin/', admin.site.urls),   # ← lien secret
-    path('refresh-eleves/', views.refresh_eleves, name='refresh_eleves'),
     path('', views.home, name='home'),  # page d'accueil
     path('eleves/', include(('eleves.urls', 'eleves'), namespace='eleves')),
     path('avis/', include(('avis.urls', 'avis'), namespace='avis')),
