@@ -1,10 +1,6 @@
 # eleves/urls.py
 from django.urls import path
 from . import views
-# === NETLIFY - GÉNÉRATION STATIQUE (CORRIGÉ) ===
-from django_distill import distill_path
-from eleves.views import rechercher_eleve, bulletin
-from eleves.models import Eleves
 
 #app_name = "eleves"
 urlpatterns = [
@@ -12,6 +8,11 @@ urlpatterns = [
     path('rechercher/', views.rechercher_eleve, name='rechercher_eleve'),
     path('bulletin/<str:code_eleve>/', views.bulletin, name='bulletin'),
 ]
+# === NETLIFY - GÉNÉRATION STATIQUE (CORRIGÉ) ===
+from django_distill import distill_path
+from eleves.views import rechercher_eleve, bulletin
+from eleves.models import Eleves
+
 
 urlpatterns += [
     # Page de recherche
