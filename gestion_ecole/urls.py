@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from django.views.generic import TemplateView
-from . import views  # Assure-toi d'importer les vues
+from gestion_ecole import views
 urlpatterns = [
    
     path('', views.home, name='home'),  # page d'accueil
