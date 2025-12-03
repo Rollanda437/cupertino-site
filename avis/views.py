@@ -10,7 +10,6 @@ def index_avis(request):
 
 
 # 📰 Liste + ajout d’un avis
-@login_required
 def liste_avis(request):
     avis_liste = Avis.objects.order_by('-date_publication')
 
