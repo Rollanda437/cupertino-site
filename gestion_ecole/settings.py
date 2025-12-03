@@ -1,6 +1,6 @@
 import os
 import shutil
-from pathlib import Path
+from pathlib import Path, PosixPath
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,14 +56,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         # Localement, la base est ici (dans le répertoire du projet)
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': PosixPath('/var/task/db.sqlite3'),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
     }
 }
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # LOGIQUE DE COPIE DB POUR VERCEL
 # Le chemin temporaire de Vercel doit être /tmp, pas la racine /
 LOCAL_DB_PATH = BASE_DIR / 'db.sqlite3'
