@@ -32,6 +32,7 @@ def importer_dernier_csv():
             Classe.objects.all().delete()
             print("Anciennes données élèves et classes supprimées.")
     except Exception as e:
+        # Cette erreur est capturée si la suppression échoue
         print(f"Erreur lors de la suppression des anciennes données : {e}. Le script s'arrête.")
         return
 
@@ -76,7 +77,8 @@ def importer_dernier_csv():
                 # Si la classe a été trouvée, préparer l'objet Eleves
                 if classe_obj:
                     eleve = Eleves(
-                        code_eleve=row.get('code_eleves', '').strip(), 
+                        # 🟢 CORRECTION : 'code_eleves' remplacé par 'code_eleve'
+                        code_eleve=row.get('code_eleve', '').strip(), 
                         prenom=row.get('prenom', '').strip().title(),
                         nom=row.get('nom', '').strip().upper(),
                         classe=classe_obj,
@@ -88,7 +90,9 @@ def importer_dernier_csv():
 
         # --- ÉTAPE 4: Création des Élèves en Masse ---
         if eleves_a_creer:
-             Eleves.objects.bulk_create(eleves_a_creer, batch_size=500)
+             # Utilisation de la transaction pour garantir l'insertion complète
+             with transaction.atomic():
+                 Eleves.objects.bulk_create(eleves_a_creer, batch_size=500)
              print(f"✅ {len(eleves_a_creer)} élèves créés en masse. {Classe.objects.count()} classes enregistrées.")
         else:
              print("⚠️ Aucune ligne valide trouvée pour l'importation des élèves.")
