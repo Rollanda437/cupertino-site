@@ -26,7 +26,7 @@ def rechercher_eleve(request):
 # =======================================================
 # VUE DU BULLETIN (avec restriction de sécurité)
 # =======================================================
-@login_required # Force l'utilisateur à se connecter
+
 def bulletin(request, code_eleve):
     eleve = get_object_or_404(Eleves, code_eleve=code_eleve.upper())
     semestre_nom = request.GET.get('semestre', 'S1')
