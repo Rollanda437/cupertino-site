@@ -27,5 +27,5 @@ urlpatterns = [
     path('avis/', include(('avis.urls', 'avis'), namespace='avis')),
     path('calendrier/', include(('calendrier.urls', 'calendrier'), namespace='calendrier')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('static/', include('django.contrib.staticfiles.urls')),
+    #path('static/', include('django.contrib.staticfiles.urls')),
 ]
