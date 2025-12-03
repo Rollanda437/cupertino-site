@@ -1,6 +1,6 @@
 # calendrier/urls.py
 from django.urls import path
-from . import views
+from gestion_ecole import views
 
 urlpatterns = [
     # exemple de route

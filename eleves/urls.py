@@ -1,6 +1,6 @@
 # eleves/urls.py
 from django.urls import path
-from . import views
+from gestion_ecole import views
 
 #app_name = "eleves"
 urlpatterns = [
