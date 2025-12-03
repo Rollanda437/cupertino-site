@@ -23,7 +23,7 @@ urlpatterns = [
    
     path('', views.home, name='home'),  # page d'accueil
     path('admin/', admin.site.urls),   # ← lien secret
-    path('eleves/', include(('eleves.urls', 'eleves'), namespace='eleves')),
+    #path('eleves/', include(('eleves.urls', 'eleves'), namespace='eleves')),
     path('avis/', include(('avis.urls', 'avis'), namespace='avis')),
     path('calendrier/', include(('calendrier.urls', 'calendrier'), namespace='calendrier')),
     path('accounts/', include('django.contrib.auth.urls')),
