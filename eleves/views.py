@@ -1,35 +1,28 @@
-
 from django.shortcuts import render, get_object_or_404
+from django.http import Http404 # ⬅️ NOUVEL IMPORT NÉCESSAIRE
 from .models import Eleves, Note, Semestre
 
-def index_eleves(request):
-    return render(request, 'index.html')
-
-def rechercher_eleve(request):
-    eleve_info = None
-    erreur_message = None
-    if request.method == 'POST':
-        code = request.POST.get('code_eleve', '').strip().upper()
-        if code:
-            try:
-                eleve_info = Eleves.objects.get(code_eleve=code)
-            except Eleves.DoesNotExist:
-                erreur_message = f"Aucun élève trouvé avec le code {code}."
-    return render(request, 'eleves/recherche.html', {
-        'eleve_info': eleve_info,
-        'erreur_message': erreur_message,
-    })
+# ... (fonctions précédentes)
 
 def bulletin(request, code_eleve):
     eleve = get_object_or_404(Eleves, code_eleve=code_eleve.upper())
     semestre_nom = request.GET.get('semestre', 'S1')
     
-    # Crée le semestre s'il n'existe pas
-    semestre, _ = Semestre.objects.get_or_create(nom=semestre_nom)
-    if semestre_nom in ['S1', 'S2']:
-        Semestre.objects.get_or_create(nom='S1')
-        Semestre.objects.get_or_create(nom='S2')
+    # ❌ ANCIEN CODE (Provoque l'erreur en essayant de CRÉER)
+    # semestre, _ = Semestre.objects.get_or_create(nom=semestre_nom)
+    # if semestre_nom in ['S1', 'S2']:
+    #     Semestre.objects.get_or_create(nom='S1')
+    #     Semestre.objects.get_or_create(nom='S2')
 
+    # ✅ NOUVEAU CODE (Tente seulement de LIRE, ou 404)
+    # 1. Tente de récupérer le Semestre demandé (S1, S2, etc.)
+    try:
+        semestre = Semestre.objects.get(nom=semestre_nom)
+    except Semestre.DoesNotExist:
+        # Si le semestre n'est pas trouvé (et donc pas créé), renvoie une erreur 404
+        raise Http404(f"Le semestre '{semestre_nom}' n'existe pas dans la base de données. Il doit être pré-créé.")
+
+    # 2. Le reste du code reste inchangé...
     notes = Note.objects.filter(eleve=eleve, semestre=semestre).select_related('matiere')
 
     total_moyennes = []
