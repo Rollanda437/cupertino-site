@@ -1,5 +1,5 @@
 from django.urls import path
-from gestion_ecole import views
+from . import views
 
 app_name = 'avis'  # <--- TRÈS IMPORTANT : namespace !
 urlpatterns = [

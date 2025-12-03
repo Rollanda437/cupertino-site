@@ -3,6 +3,23 @@ from django.http import Http404 # ⬅️ NOUVEL IMPORT NÉCESSAIRE
 from .models import Eleves, Note, Semestre
 
 # ... (fonctions précédentes)
+def index_eleves(request):
+    return render(request, 'index.html')
+
+def rechercher_eleve(request):
+    eleve_info = None
+    erreur_message = None
+    if request.method == 'POST':
+        code = request.POST.get('code_eleve', '').strip().upper()
+        if code:
+            try:
+                eleve_info = Eleves.objects.get(code_eleve=code)
+            except Eleves.DoesNotExist:
+                erreur_message = f"Aucun élève trouvé avec le code {code}."
+    return render(request, 'eleves/recherche.html', {
+        'eleve_info': eleve_info,
+        'erreur_message': erreur_message,
+    })
 
 def bulletin(request, code_eleve):
     eleve = get_object_or_404(Eleves, code_eleve=code_eleve.upper())
